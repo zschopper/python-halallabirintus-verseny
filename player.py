@@ -13,6 +13,7 @@ class Player:
         self.dex = roll(1, 6)
         self.hp = roll(2, 12)
         self.luck = roll(1, 6)
+        self.printout_charsheet()
 
     def luck_test(self):
         success = roll(2) < self.luck
@@ -25,7 +26,7 @@ class Player:
 
     def damage(self, amount):
         self.hp -= amount
-        printc(f"{amount} ÉLETERŐ pontot sebződtél, %ORANGE%{self.hp}%ENDC% ÉLETERŐ pontod maradt.")
+        printc(f"%RED%{amount}%ENDC% ÉLETERŐ pontot sebződtél, %ORANGE%{self.hp}%ENDC% ÉLETERŐ pontod maradt.")
         return self.hp > 0
 
     def loot(self, item, amount):
@@ -36,14 +37,15 @@ class Player:
         printc(f"%GREEN%{amount} {item}%ENDC% bekerült a leltáradba, most már %WHITE%{self.inventory[item]}%ENDC% {item} van nálad.")
 
     def printout_charsheet(self):
-        printc("%HEADER%Karakterlap:%ENDC%")
-        print(f"Ügyesség: {self.dex}")
-        print(f"Életerő: {self.hp}")
-        print(f"Szerencse: {self.luck}")
+        printc("\n~~~ %ORANGE%Karakterlap:%ENDC% ~~~")
+        printc(f"Ügyesség:  %WHITE%{self.dex:>2}%ENDC%")
+        printc(f"Életerő:   %WHITE%{self.hp:>2}%ENDC%")
+        printc(f"Szerencse: %WHITE%{self.luck:>2}%ENDC%")
         print("\nTárgyak:")
 
         if len(self.inventory):
             for key, item in self.inventory.items():
-                print(f"{item} db {key}")
+                printc(f"%YELLOW%{item}%ENDC% db %YELLOW%{key}%ENDC%")
         else:
             print("Nincs nálad semmi.")
+        print("~~~~~~~~~~~~~~~~~~~~\n")
