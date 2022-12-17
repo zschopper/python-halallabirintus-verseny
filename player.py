@@ -16,13 +16,17 @@ class Player:
         self.printout_charsheet()
 
     def luck_test(self):
-        success = roll(2) < self.luck
-        self.luck -= 1
-        if success:
-            printc(f"Szerencséd volt! %HEADER%{self.luck}%ENDC% SZERENCSÉD maradt!")
+        if not self.luck:
+            print("Elfogyott a szerencséd!")
+            return False
         else:
-            printc(f"Nem volt szerencséd! %HEADER%{self.luck}%ENDC% SZERENCSÉD maradt!")
-        return success
+            success = roll(2) < self.luck
+            self.luck -= 1
+            if success:
+                printc(f"Szerencséd volt! %HEADER%{self.luck}%ENDC% SZERENCSÉD maradt!")
+            else:
+                printc(f"Nem volt szerencséd! %HEADER%{self.luck}%ENDC% SZERENCSÉD maradt!")
+            return success
 
     def damage(self, amount):
         self.hp -= amount
