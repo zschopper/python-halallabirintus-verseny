@@ -5,7 +5,7 @@ from printc import printc
 class Story:
 
     def __init__(self, player):
-        self.room = 0
+        self.room = "1"
         self.finished = False
 
         self.player = player
@@ -14,32 +14,28 @@ class Story:
         self.start()
 
     def start(self):
-        # self.move(1)  # start
-        # self.move(387)  # combat
-        # self.move(270)  # loot
-        self.move(215)
+        self.loop(1)  # start
+        # self.loop(387)  # combat
+        # self.loop(270)  # loot
+        # self.loop(215) # loc. damage
 
-    def move(self, room):
-        if str(room) not in self.storyline:
-            print("Érvénytelen választás!")
-            result = False
-        else:
+    def loop(self, room=None):
+        if room is not None:
             self.room = str(room)
-
+        while not self.finished:
             self.location = self.storyline[self.room]
-
             self.output_location()
             self.handle_damage()
             self.handle_loot()
             self.handle_combat()
             if not self.finished:
                 self.handle_actions()
-            result = True
-        return result
 
     def output_location(self):
         if 'title' in self.location:
-            print(self.location['title'])
+            printc(self.location['title'])
+        else:
+            printc(f"~~~ %WHITE%{self.room}%ENDC%. oldal ~~~")
         printc(self.location['description'])
 
     def handle_damage(self):
@@ -106,10 +102,9 @@ class Story:
             while not moved:
                 print("Mit szeretnél csinálni?\n")
                 print("k - A karakter lap megtekintése")
-                exits = []
                 i = 0
                 while i < len(exits):
-                    print(f"{i+1} - lapozás a {exits[i]}. oldalra")
+                    printc(f"{i+1} - lapozás a %YELLOW%{exits[i]}%ENDC%. oldalra")
                     i += 1
                 else:
                     moved = True
@@ -118,7 +113,7 @@ class Story:
                 if action.isnumeric():
                     if int(action) <= len(exits):
                         moved = True
-                        self.move(exits[int(action) - 1])
+                        self.room = str(exits[int(action) - 1])
                 else:
                     if action == "k":
                         self.player.printout_charsheet()
